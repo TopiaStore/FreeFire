@@ -7,29 +7,26 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
       color: white;
       text-align: center;
       margin: 0;
       padding: 0;
     }
-    .container {
-      margin-top: 50px;
+    h1 {
+      margin-top: 20px;
     }
-    .roulette {
+    .roulette-container {
       position: relative;
-      margin: 50px auto;
+      margin: 30px auto;
       width: 300px;
       height: 300px;
-      border: 10px solid white;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
-    .wheel {
-      position: absolute;
+    .roulette {
       width: 100%;
       height: 100%;
+      border-radius: 50%;
+      border: 10px solid white;
       background: conic-gradient(
         #ffcc00 0deg 45deg,
         #ff6600 45deg 90deg,
@@ -40,47 +37,20 @@
         #ff0066 270deg 315deg,
         #999966 315deg 360deg
       );
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
       transform: rotate(0deg);
       transition: transform 3s ease-out;
     }
-    .wheel::before {
-      content: '';
+    .pointer {
       position: absolute;
       top: -10px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid white;
-    }
-    .prize {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: black;
-      font-weight: bold;
-      text-align: center;
-    }
-    .prize:nth-child(1) { transform: rotate(22.5deg) translateY(-130px); }
-    .prize:nth-child(2) { transform: rotate(67.5deg) translateY(-130px); }
-    .prize:nth-child(3) { transform: rotate(112.5deg) translateY(-130px); }
-    .prize:nth-child(4) { transform: rotate(157.5deg) translateY(-130px); }
-    .prize:nth-child(5) { transform: rotate(202.5deg) translateY(-130px); }
-    .prize:nth-child(6) { transform: rotate(247.5deg) translateY(-130px); }
-    .prize:nth-child(7) { transform: rotate(292.5deg) translateY(-130px); }
-    .prize:nth-child(8) { transform: rotate(337.5deg) translateY(-130px); }
-    .prize img {
-      width: 50px;
-      height: 50px;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid white;
+      z-index: 10;
     }
     button {
       margin-top: 20px;
@@ -91,7 +61,6 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #cc5200;
@@ -103,61 +72,49 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Spin Roulette Free Fire</h1>
-    <div class="roulette">
-      <div id="wheel" class="wheel">
-        <div class="prize"><img src="data:image/png;base64,..." alt="100 Diamonds"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="500 Diamonds"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="1000 Diamonds"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="2500 Diamonds"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="5000 Diamonds"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="Random Weapon Skin"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="Exclusive Bundle"></div>
-        <div class="prize"><img src="data:image/png;base64,..." alt="Legendary Skin"></div>
-      </div>
-    </div>
-    <button id="spin-btn">SPIN</button>
-    <div id="result" class="result">Klik "SPIN" untuk memulai!</div>
+  <h1>Spin Roulette Free Fire</h1>
+  <div class="roulette-container">
+    <div class="pointer"></div>
+    <div id="roulette" class="roulette"></div>
   </div>
-  <script>
-    const wheel = document.getElementById('wheel');
-    const spinBtn = document.getElementById('spin-btn');
-    const result = document.getElementById('result');
+  <button id="spin-btn">SPIN</button>
+  <div id="result" class="result">Klik "SPIN" untuk memulai!</div>
 
+  <script>
+    const roulette = document.getElementById("roulette");
+    const spinBtn = document.getElementById("spin-btn");
+    const result = document.getElementById("result");
     const prizes = [
       "100 Diamonds",
       "500 Diamonds",
-      "1000 Diamonds",
-      "2500 Diamonds",
-      "5000 Diamonds",
-      "Random Weapon Skin",
+      "Legend Skin",
       "Exclusive Bundle",
-      "Legendary Skin"
+      "1000 Diamonds",
+      "Random Skin",
+      "2500 Diamonds",
+      "Special Bundle"
     ];
 
-    function playSound(frequency, duration, type = 'sine') {
-      const context = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = context.createOscillator();
-      const gainNode = context.createGain();
+    spinBtn.addEventListener("click", () => {
+      // Tambahkan suara spin
+      const spinSound = new Audio(
+        "https://www.soundjay.com/button/sounds/button-09.mp3"
+      );
 
-      oscillator.type = type;
-      oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-      oscillator.connect(gainNode);
-      gainNode.connect(context.destination);
+      const randomDegree = Math.floor(Math.random() * 3600) + 720; // Putaran ekstra untuk estetika
+      const prizeIndex = Math.floor(((randomDegree % 360) / 45)); // Hitung hadiah dari rotasi
 
-      oscillator.start();
+      roulette.style.transform = `rotate(${randomDegree}deg)`;
+      spinSound.play(); // Mainkan suara
+
+      spinBtn.disabled = true; // Nonaktifkan tombol selama animasi
+      result.textContent = "Roulette sedang berputar...";
+
       setTimeout(() => {
-        oscillator.stop();
-        context.close();
-      }, duration);
-    }
-
-    spinBtn.addEventListener('click', () => {
-      const randomDegree = Math.floor(Math.random() * 3600) + 720;
-      const index = Math.floor(((randomDegree % 360) / 45));
-
-      const spinInterval = setInterval(() => playSound(300, 100, 'square'), 150);
-
-      wheel.style.transition = 'transform 3s ease-out';
-      wheel.style.transform = `1
+        spinBtn.disabled = false; // Aktifkan kembali tombol setelah animasi selesai
+        result.innerText = `Selamat! Anda mendapatkan ${prizes[prizeIndex]}.`;
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
