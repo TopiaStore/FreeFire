@@ -40,6 +40,47 @@
         #ff0066 270deg 315deg,
         #999966 315deg 360deg
       );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      transform: rotate(0deg);
+      transition: transform 3s ease-out;
+    }
+    .wheel::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid white;
+    }
+    .prize {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+    }
+    .prize:nth-child(1) { transform: rotate(22.5deg) translateY(-130px); }
+    .prize:nth-child(2) { transform: rotate(67.5deg) translateY(-130px); }
+    .prize:nth-child(3) { transform: rotate(112.5deg) translateY(-130px); }
+    .prize:nth-child(4) { transform: rotate(157.5deg) translateY(-130px); }
+    .prize:nth-child(5) { transform: rotate(202.5deg) translateY(-130px); }
+    .prize:nth-child(6) { transform: rotate(247.5deg) translateY(-130px); }
+    .prize:nth-child(7) { transform: rotate(292.5deg) translateY(-130px); }
+    .prize:nth-child(8) { transform: rotate(337.5deg) translateY(-130px); }
+    .prize img {
+      width: 50px;
+      height: 50px;
     }
     button {
       margin-top: 20px;
@@ -65,9 +106,18 @@
   <div class="container">
     <h1>Spin Roulette Free Fire</h1>
     <div class="roulette">
-      <div id="wheel" class="wheel"></div>
-      <button id="spin-btn">SPIN</button>
+      <div id="wheel" class="wheel">
+        <div class="prize"><img src="data:image/png;base64,..." alt="100 Diamonds"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="500 Diamonds"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="1000 Diamonds"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="2500 Diamonds"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="5000 Diamonds"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="Random Weapon Skin"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="Exclusive Bundle"></div>
+        <div class="prize"><img src="data:image/png;base64,..." alt="Legendary Skin"></div>
+      </div>
     </div>
+    <button id="spin-btn">SPIN</button>
     <div id="result" class="result">Klik "SPIN" untuk memulai!</div>
   </div>
   <script>
@@ -110,17 +160,4 @@
       const spinInterval = setInterval(() => playSound(300, 100, 'square'), 150);
 
       wheel.style.transition = 'transform 3s ease-out';
-      wheel.style.transform = `rotate(${randomDegree}deg)`;
-
-      setTimeout(() => {
-        clearInterval(spinInterval);
-        const winningIndex = (8 - index) % 8;
-
-        playSound(600, 500, 'triangle');
-
-        result.textContent = `Anda memenangkan: ${prizes[winningIndex]}!`;
-      }, 3000);
-    });
-  </script>
-</body>
-</html>
+      wheel.style.transform = `1
