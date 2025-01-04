@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopiaStore - Pemesanan Layanan</title>
+    <style>
+        /* Reset CSS untuk pengaturan dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Tampilan dasar */
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #1a1a1a, #333);
+        }
+
+        header {
+            width: 100%;
+            padding: 30px 0;
+            background-color: #111;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            border-bottom: 3px solid #e74c3c;
+            margin-bottom: 30px;
+        }
+
+        main {
+            max-width: 800px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 1.2em;
+            color: #e74c3c;
+        }
+
+        input, select, textarea, button {
+            padding: 12px;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            background-color: #444;
+            color: white;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #f39c12;
+        }
+
+        button {
+            background-color: #f39c12;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1.2em;
+            padding: 14px;
+        }
+
+        button:hover {
+            background-color: #e67e22;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="game-font">TopiaStore</h1>
+    </header>
+    <main>
+        <h1>Pesan Layanan Game</h1>
+        <form id="orderForm">
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="phone">Nomor Telepon:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10,15}" placeholder="Contoh: 08123456789" required>
+            
+            <label for="service">Layanan yang Dipesan:</label>
+            <select id="service" name="service">
+                <option value="Server GTA SAMP">Server GTA SAMP</option>
+                <option value="Private Server Growtopia">Private Server Growtopia</option>
+                <option value="Minecraft Server">Minecraft Server</option>
+                <option value="Server GTA V">Server GTA V</option>
+                <option value="Promosi Server">Promosi Server</option>
+                <option value="Bot Discord">Bot Discord</option>
+                <option value="Bot WA">Bot WA</option>
+                <option value="Bot UCP GTA">Bot UCP GTA</option>
+                <option value="Mapping GTA SAMP">Mapping GTA SAMP</option>
+                <option value="Creator Custom Items GTPS">Creator Custom Items GTPS</option>
+            </select>
+            
+            <label for="message">Pesan Tambahan:</label>
+            <textarea id="message" name="message"></textarea>
+            
+            <button type="submit">Kirim Pesanan</button>
+        </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        emailjs.init("rBv2PT8W1Pj0hmWAj");
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                service: document.getElementById('service').value,
+                message: document.getElementById('message').value,
+            };
+
+            if (!formData.name || !formData.email || !formData.phone || !formData.service) {
+                alert('Mohon isi semua kolom yang diperlukan.');
+                return;
+            }
+
+            emailjs.send("service_s24souq", "template_xqfsdpm", formData)
+                .then(function(response) {
+                    alert('Formulir berhasil dikirim! Kami akan segera menghubungi Anda.');
+                    document.getElementById('orderForm').reset();
+                }, function(error) {
+                    alert('Terjadi kesalahan, silakan coba lagi.');
+                    console.error('EmailJS Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
